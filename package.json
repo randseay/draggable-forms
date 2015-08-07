@@ -1,0 +1,28 @@
+{
+  "name": "draggable-forms",
+  "version": "0.0.0",
+  "description": "A draggable form builder",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/randseay/draggable-forms"
+  },
+  "keywords": [
+    "draggable",
+    "forms",
+    "builder"
+  ],
+  "author": "Rand Seay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/randseay/draggable-forms/issues"
+  },
+  "homepage": "https://github.com/randseay/draggable-forms",
+  "devDependencies": {
+    "bower": "^1.4.1",
+    "gulp": "^3.9.0"
+  }
+}

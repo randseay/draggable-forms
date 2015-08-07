@@ -1,0 +1,28 @@
+{
+  "name": "draggable-forms",
+  "version": "0.0.0",
+  "authors": [
+    "Rand Seay <rand.seay@gmail.com>"
+  ],
+  "description": "A draggable form builder",
+  "main": "app.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "draggable",
+    "forms",
+    "builder"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fuselage": "~1.0.1"
+  }
+}
