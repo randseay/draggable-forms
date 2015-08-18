@@ -23,6 +23,16 @@
   "homepage": "https://github.com/randseay/draggable-forms",
   "devDependencies": {
     "bower": "^1.4.1",
-    "gulp": "^3.9.0"
+    "browser-sync": "^2.8.2",
+    "del": "^1.2.1",
+    "gulp": "^3.9.0",
+    "gulp-changed": "^1.3.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-connect": "^2.2.0",
+    "gulp-debug": "^2.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.0.4",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.2.0"
   }
 }

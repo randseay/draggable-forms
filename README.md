@@ -6,9 +6,11 @@ Clone the repository and move into the project directory
 git clone https://github.com/randseay/draggable-forms.git && cd draggable-forms
 ```
 
-Install node dependencies
+Install both global and local node dependencies
 
 ```sh
+npm install -g bower gulp
+
 npm install
 ```
 
@@ -18,8 +20,8 @@ Install bower dependencies
 bower install
 ```
 
-Serve the project on port 3000 using node's 'http-server' (`npm install -g http-server`)
+Serve the project
 
 ```sh
-http-server -p 3000
+gulp serve
 ```
