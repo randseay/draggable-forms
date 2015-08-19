@@ -1,5 +1,11 @@
 'use strict';
 
+var config = {
+    bowerDir: './bower_components',
+    buildDir: './dist',
+    srcDir: './src/app'
+};
+
 var gulp = require('gulp'),
     browserify = require('browserify'),
     browserSync = require('browser-sync').create(),
@@ -10,83 +16,102 @@ var gulp = require('gulp'),
     del = require('del'),
     gutil = require('gulp-util'),
     maps = require('gulp-sourcemaps'),
+    merge = require('merge-stream'),
     reactify = require('reactify'),
     rename = require('gulp-rename'),
     sass = require('gulp-sass'),
     source = require('vinyl-source-stream'),
     uglify = require('gulp-uglify');
 
-gulp.task('JS', function () {
-  // set up the browserify instance on a task basis
-  var b = browserify({
-    entries: './src/app/js/app.js',
-    debug: true,
-    // defining transforms here will avoid crashing your stream
-    transform: [reactify]
-  });
+gulp.task('fontAwesome', function() {
+    var styles = gulp.src(config.bowerDir + '/fontawesome/css/font-awesome.min.css')
+        .pipe(changed(config.buildDir + '/css'))
+        .pipe(gulp.dest(config.buildDir + '/css'));
 
-  return b.bundle()
-    .pipe(source('app.js'))
-    .pipe(buffer())
-    .pipe(maps.init({loadMaps: true}))
-    .pipe(debug({title: 'JS compiled:'}))
-    .pipe(uglify())
-    .pipe(rename('app.min.js'))
-    .on('error', gutil.log)
-    .pipe(maps.write('./'))
-    .pipe(gulp.dest('./dist/js/'))
-    .pipe(browserSync.stream());
+    var fonts = gulp.src(config.bowerDir + '/fontawesome/fonts/**.*')
+        .pipe(changed(config.buildDir + '/fonts'))
+        .pipe(gulp.dest(config.buildDir + '/fonts'));
+
+    return merge(styles, fonts);
+});
+
+gulp.task('JS', function () {
+    var b = browserify({
+        entries: config.srcDir + '/js/app.js',
+        debug: true,
+        transform: [reactify]
+    });
+
+    return b.bundle()
+        .on('error', function(err) {
+            gutil.log(
+                gutil.colors.red('Browserify compile error:'),
+                err.message
+            );
+            gutil.beep();
+            this.emit('end');
+        })
+        .pipe(source('app.js'))
+        .pipe(buffer())
+        .pipe(maps.init({loadMaps: true}))
+        .pipe(debug({title: 'JS compiled:'}))
+        .pipe(uglify())
+        .pipe(rename('app.min.js'))
+        .on('error', gutil.log)
+        .pipe(maps.write('./'))
+        .pipe(gulp.dest(config.buildDir + '/js/'))
+        .pipe(browserSync.stream());
 });
 
 gulp.task('moveSCSS', function() {
     return gulp.src([
-            'bower_components/fuselage/scss/fuselage.scss',
-            'bower_components/fuselage/scss/_settings.scss'
+            config.bowerDir + '/fuselage/scss/fuselage.scss',
+            config.bowerDir + '/fuselage/scss/_settings.scss'
         ])
-        .pipe(changed('src/app/scss'))
+        .pipe(changed(config.srcDir + '/scss'))
         .pipe(debug({title: 'Styles moved:'}))
-        .pipe(gulp.dest('src/app/scss'));
+        .pipe(gulp.dest(config.srcDir + '/scss'));
 });
 
 gulp.task('compileSCSS', ['moveSCSS'], function() {
-    return gulp.src('src/app/scss/app.scss')
+    return gulp.src(config.srcDir + '/scss/app.scss')
         .pipe(maps.init())
         .pipe(sass({
             outputStyle: 'compressed',
-            includePaths: ['bower_components/fuselage/scss/components']
+            includePaths: [config.bowerDir + '/fuselage/scss/components']
         }).on('error', sass.logError))
         .pipe(debug({title: 'Sass compiled:'}))
         .pipe(rename('app.min.css'))
         .pipe(maps.write('./'))
-        .pipe(gulp.dest('dist/css'))
+        .pipe(gulp.dest(config.buildDir + '/css'))
         .pipe(browserSync.stream());
 });
 
 gulp.task('moveHTML', function() {
-    return gulp.src('src/app/*.html')
-        .pipe(changed('src/app/*.html'))
+    return gulp.src(config.srcDir + '/*.html')
+        .pipe(changed(config.buildDir + '/*.html'))
         .pipe(debug({title: 'HTML moved:'}))
-        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest(config.buildDir))
         .pipe(browserSync.stream());
 });
 
 gulp.task('watchFiles', function() {
-    gulp.watch('src/app/scss/**', ['compileSCSS']);
-    gulp.watch('src/app/js/**/*.js*', ['JS']);
-    gulp.watch('src/app/*.html', ['moveHTML']);
+    gulp.watch(config.srcDir + '/scss/**', ['compileSCSS']);
+    gulp.watch(config.srcDir + '/js/**/*.js*', ['JS']);
+    gulp.watch(config.srcDir + '/*.html', ['moveHTML']);
 });
 
 gulp.task('clean', function() {
-    del('dist');
+    del(config.buildDir);
 });
 
-gulp.task('build', ['JS', 'compileSCSS', 'moveHTML']);
+gulp.task('build', ['fontAwesome', 'JS', 'compileSCSS', 'moveHTML']);
 
 gulp.task('serve', ['build'], function() {
     browserSync.init({
         port: 3000,
         server: {
-            baseDir: './dist'
+            baseDir: config.buildDir
         }
     });
 

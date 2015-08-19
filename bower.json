@@ -23,6 +23,7 @@
     "tests"
   ],
   "dependencies": {
-    "fuselage": "~1.0.1"
+    "fuselage": "~1.0.1",
+    "fontawesome": "~4.4.0"
   }
 }
