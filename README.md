@@ -9,7 +9,7 @@ git clone https://github.com/randseay/draggable-forms.git && cd draggable-forms
 Install both global and local node dependencies
 
 ```sh
-npm install -g bower gulp
+npm install -g bower browserify gulp
 
 npm install
 ```

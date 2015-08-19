@@ -23,7 +23,6 @@
     "tests"
   ],
   "dependencies": {
-    "fuselage": "~1.0.1",
-    "react": "~0.13.3"
+    "fuselage": "~1.0.1"
   }
 }
