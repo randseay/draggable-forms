@@ -1,10 +1,13 @@
 var React = require('react');
 
-React.render(
-    <h2>Input loaded!</h2>,
-    document.getElementById('input')
-);
+var Input = React.createClass({
+    render: function() {
+        var input = this.props.inputInfo;
 
-module.exports = function() {
-    return 'test';
-};
+        return (
+            <input id={input.properties.name} name={input.properties.name} type={input.properties.type} />
+        );
+    }
+});
+
+module.exports = Input;

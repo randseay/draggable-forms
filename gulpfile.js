@@ -1,9 +1,9 @@
 'use strict';
 
 var config = {
-    bowerDir: './bower_components',
-    buildDir: './dist',
-    srcDir: './src/app'
+    bowerDir: 'bower_components',
+    buildDir: 'dist',
+    srcDir: 'src/app'
 };
 
 var gulp = require('gulp'),
@@ -96,7 +96,7 @@ gulp.task('moveHTML', function() {
 });
 
 gulp.task('watchFiles', function() {
-    gulp.watch(config.srcDir + '/scss/**', ['compileSCSS']);
+    gulp.watch(config.srcDir + '/scss/**/*.scss', ['compileSCSS']);
     gulp.watch(config.srcDir + '/js/**/*.js*', ['JS']);
     gulp.watch(config.srcDir + '/*.html', ['moveHTML']);
 });
