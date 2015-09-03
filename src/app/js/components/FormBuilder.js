@@ -28,7 +28,6 @@ var FormBuilder = React.createClass({
             <div className='row'>
                 <div className='column one-whole medium-one-half'>
                     <AddInputGroup handleAddInputGroup={this.updateInputGroupList}></AddInputGroup>
-                    {this.props.children}
                 </div>
 
                 <div className='column one-whole medium-one-half'>

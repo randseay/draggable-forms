@@ -1,3 +1,5 @@
+'use strict';
+
 var FormBuilder = require('./components/FormBuilder');
 var React = require('react');
 

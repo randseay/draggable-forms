@@ -1,13 +1,8 @@
+var camelize = require('../utilities/camelize');
 var React = require('react');
 var uuid = require('node-uuid');
 
 var addInputGroup = React.createClass({
-    camelize: function(str) {
-        return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
-            if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
-            return index == 0 ? match.toLowerCase() : match.toUpperCase();
-        }).replace(/[^\w]/gi, '');
-    },
     handleSubmit: function(event) {
         event.preventDefault();
 
@@ -16,8 +11,14 @@ var addInputGroup = React.createClass({
             date: new Date(),
             properties: {
                 label: this.refs.inputLabel.getDOMNode().value.trim(),
-                name: this.camelize(this.refs.inputLabel.getDOMNode().value.trim()),
-                type: this.refs.inputType.getDOMNode().value.trim()
+                name: camelize(this.refs.inputLabel.getDOMNode().value.trim()),
+                type: this.refs.inputType.getDOMNode().value.trim(),
+                disabled: false,
+                readonly: false,
+                options: [
+                    {value: 'test-1', title: 'Test 1', disabled: true, selected: true},
+                    {value: 'test-2', title: 'Test 2'}
+                ]
             }
         }
 

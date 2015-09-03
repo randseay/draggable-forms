@@ -2,10 +2,21 @@ var React = require('react');
 
 var Input = React.createClass({
     render: function() {
-        var input = this.props.inputInfo;
+        var attrs = {};
+        var inputInfo = this.props.inputInfo;
+
+        attrs.id = inputInfo.properties.name;
+        attrs.name = inputInfo.properties.name;
+        attrs.type = inputInfo.properties.type;
+        if (inputInfo.properties.disabled) {
+            attrs['disabled'] = 'disabled';
+        }
+        if (inputInfo.properties.readonly) {
+            attrs['readonly'] = 'readonly';
+        }
 
         return (
-            <input id={input.properties.name} name={input.properties.name} type={input.properties.type} />
+            <input {...attrs} />
         );
     }
 });

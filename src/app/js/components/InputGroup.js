@@ -2,13 +2,13 @@ var Input = require('./inputs/TextInput');
 var React = require('react');
 var Select = require('./inputs/SelectInput');
 
-var majorInputs = ['select', 'text', 'password'];
+var majorInputs = ['password', 'text', 'select'];
 var inlineInputs = ['checkbox', 'radio'];
 
 var InputGroup = React.createClass({
     handleAddMajorInput: function(inputGroup) {
         if (inputGroup.properties.type == 'select') {
-            return (<Select inputInfo={inputGroup}></Select>);
+            return (<Select inputInfo={inputGroup} handleAddOptions={inputGroup.options}></Select>);
         } else {
             return (<Input inputInfo={inputGroup} />);
         }
