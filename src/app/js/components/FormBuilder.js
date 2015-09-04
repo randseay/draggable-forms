@@ -27,7 +27,7 @@ var FormBuilder = React.createClass({
         return (
             <div className='row'>
                 <div className='column one-whole medium-one-half'>
-                    <AddInputGroup handleAddInputGroup={this.updateInputGroupList}></AddInputGroup>
+                    <AddInputGroup handleAddInputGroup={this.updateInputGroupList} />
                 </div>
 
                 <div className='column one-whole medium-one-half'>

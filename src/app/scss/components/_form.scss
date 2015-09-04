@@ -6,3 +6,15 @@ form {
     box-shadow: 0 0 20px -5px rgba(153,153,153,0.9);
     padding: $spacing-unit / 2;
 }
+
+fieldset fieldset {
+    margin-bottom: $spacing-unit;
+}
+
+.repeat-control {
+    cursor: pointer;
+
+    &:nth-child(n+2) {
+        margin-right: $spacing-unit / 2;
+    }
+}

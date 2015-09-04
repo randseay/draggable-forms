@@ -1,58 +1,32 @@
 var camelize = require('../utilities/camelize');
+var InputOptions = require('./InputOptions');
 var inputTypes = require('../utilities/inputTypes');
 var Fieldset = require('./Fieldset');
 var React = require('react');
 var uuid = require('node-uuid');
 
-var InputOptions = React.createClass({
-    getInitialState: function() {
-        return {showOptions: false}
-    },
-    handleRepeatable: function() {
-
-    },
-    handleAddOptions: function() {
-
-    },
-    render: function() {
-        return (
-            <div id='inputOptions'>
-                <Fieldset id='inputOption' legend='Option 1'>
-                    <div id='inputOption' className='row'>
-                        <div className='column one-whole medium-one-half'>
-                            <label htmlFor='inputOptionTitle'> Option Title
-                                <input id='inputOptionTitle' name='inputOptionTitle' type='text' required ref='inputOptionTitle' />
-                            </label>
-                        </div>
-
-                        <div className='column one-whole medium-one-half'>
-                            <input id='inputOptionSelected' name='inputOptionSelected' type='radio' required ref='inputOptionSelected' />
-                            <label htmlFor='inputOptionSelected'>Selected</label>
-                        </div>
-
-                        <div className='column one-whole medium-one-half'>
-                            <input id='inputOptionDisabled' name='inputOptionDisabled' type='checkbox' required ref='inputOptionDisabled' />
-                            <label htmlFor='inputOptionDisabled'>Disabled</label>
-                        </div>
-                    </div>
-                </Fieldset>
-            </div>
-        );
-    }
-});
-
 var AddInputGroup = React.createClass({
     getInitialState: function() {
-        return {showOptions: false}
+        return {
+            showOptions: false,
+            inputOptionsList: []
+        }
+    },
+    updateOptions: function(list) {
+        this.setState({
+            inputOptionsList: list
+        });
     },
     handleChangeType: function(event) {
         if (event.target.value == 'dropdown') {
-            console.log('test');
-            return {showOptions: true}
+            this.setState({showOptions: true});
+        } else {
+            this.setState({showOptions: false});
         }
     },
     handleSubmit: function(event) {
         event.preventDefault();
+        console.log(this.inputOptionsList);
 
         var inputGroup = {
             id: uuid.v4(),
@@ -63,10 +37,7 @@ var AddInputGroup = React.createClass({
                 type: this.refs.inputType.getDOMNode().value.trim(),
                 disabled: false,
                 readonly: false,
-                options: [
-                    {value: 'test-1', title: 'Test 1', disabled: true, selected: true},
-                    {value: 'test-2', title: 'Test 2'}
-                ]
+                options: this.state.inputOptionsList
             }
         }
 
@@ -98,7 +69,7 @@ var AddInputGroup = React.createClass({
                         </div>
                     </div>
 
-                    { this.state.showOptions ? <InputOptions /> : null }
+                    { this.state.showOptions ? <InputOptions handleAddInputOptions={this.updateOptions} /> : null }
 
                     <button type='submit'>Add to form <i className='fa fa-arrow-circle-right'></i></button>
                 </Fieldset>

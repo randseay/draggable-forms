@@ -44,7 +44,6 @@ var Form = React.createClass({
                 <Fieldset legend='Your Form'>
                     {createdInputGroups.length > 0 ? createdInputGroups : <EmptyForm />}
                 </Fieldset>
-                {this.props.children}
             </form>
         );
     }
