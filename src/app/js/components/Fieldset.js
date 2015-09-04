@@ -4,7 +4,7 @@ var Fieldset = React.createClass({
     render: function() {
         return (
             <fieldset>
-                <legend>Something</legend>
+                <legend>{this.props.legend}</legend>
                 {this.props.children}
             </fieldset>
         );
