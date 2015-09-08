@@ -13,6 +13,7 @@ var AddInputGroup = React.createClass({
         }
     },
     updateOptions: function(list) {
+        console.log('Updated the options!');
         this.setState({
             inputOptionsList: list
         });
@@ -26,7 +27,6 @@ var AddInputGroup = React.createClass({
     },
     handleSubmit: function(event) {
         event.preventDefault();
-        console.log(this.inputOptionsList);
 
         var inputGroup = {
             id: uuid.v4(),
@@ -69,7 +69,7 @@ var AddInputGroup = React.createClass({
                         </div>
                     </div>
 
-                    { this.state.showOptions ? <InputOptions handleAddInputOptions={this.updateOptions} /> : null }
+                    {this.state.showOptions ? <InputOptions handleAddInputOptions={this.updateOptions} /> : null}
 
                     <button type='submit'>Add to form <i className='fa fa-arrow-circle-right'></i></button>
                 </Fieldset>
