@@ -6,6 +6,21 @@ var config = {
     srcDir: 'src/app'
 };
 
+function getTimeStamp() {
+    var now = new Date();
+    var date = [
+        ('0' + (now.getMonth() + 1)).slice(-2),
+        ('0' + now.getDate()).slice(-2),
+        now.getFullYear()
+    ];
+    var time = [
+        now.getHours(),
+        ('0' + now.getMinutes()).slice(-2),
+        ('0' + now.getSeconds()).slice(-2)
+    ];
+    return [time.join(':'), date.join('/')];
+}
+
 var gulp = require('gulp'),
     browserify = require('browserify'),
     browserSync = require('browser-sync').create(),
@@ -17,6 +32,7 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     maps = require('gulp-sourcemaps'),
     merge = require('merge-stream'),
+    notify = require('gulp-notify'),
     reactify = require('reactify'),
     rename = require('gulp-rename'),
     sass = require('gulp-sass'),
@@ -41,16 +57,26 @@ gulp.task('JS', function () {
         debug: true,
         transform: [reactify]
     });
+    var errorTitle = 'Browserify compile error';
 
     return b.bundle()
+        .on('error', notify.onError({
+            title: errorTitle,
+            message: '@ <%= options.time %> on <%= options.date %>',
+            templateOptions: {
+                time: getTimeStamp()[0],
+                date: getTimeStamp()[1]
+            }
+        }))
         .on('error', function(err) {
             gutil.log(
-                gutil.colors.red('Browserify compile error:'),
+                gutil.colors.red(errorTitle),
                 err.message
             );
             gutil.beep();
             this.emit('end');
         })
+
         .pipe(source('app.js'))
         .pipe(buffer())
         .pipe(maps.init({loadMaps: true}))
@@ -60,7 +86,16 @@ gulp.task('JS', function () {
         .on('error', gutil.log)
         .pipe(maps.write('./'))
         .pipe(gulp.dest(config.buildDir + '/js/'))
-        .pipe(browserSync.stream());
+        .pipe(browserSync.stream())
+        .pipe(notify({
+            title: 'Gulp: JavaScript',
+            message: 'Created <%= file.relative %> @ <%= options.time %> on <%= options.date %>',
+            templateOptions: {
+                time: getTimeStamp()[0],
+                date: getTimeStamp()[1]
+            },
+            onLast: true
+        }));
 });
 
 gulp.task('moveSCSS', function() {
@@ -79,12 +114,22 @@ gulp.task('compileSCSS', ['moveSCSS'], function() {
         .pipe(sass({
             outputStyle: 'compressed',
             includePaths: [config.bowerDir + '/fuselage/scss/components']
-        }).on('error', sass.logError))
+        })
+        .on('error', sass.logError))
         .pipe(debug({title: 'Sass compiled:'}))
         .pipe(rename('app.min.css'))
         .pipe(maps.write('./'))
         .pipe(gulp.dest(config.buildDir + '/css'))
-        .pipe(browserSync.stream());
+        .pipe(browserSync.stream())
+        .pipe(notify({
+            title: 'Gulp: Sass',
+            message: 'Created <%= file.relative %> @ <%= options.time %> on <%= options.date %>',
+            templateOptions: {
+                time: getTimeStamp()[0],
+                date: getTimeStamp()[1]
+            },
+            onLast: true
+        }));
 });
 
 gulp.task('moveHTML', function() {
