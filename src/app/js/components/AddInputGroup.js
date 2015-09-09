@@ -8,15 +8,12 @@ var uuid = require('node-uuid');
 var AddInputGroup = React.createClass({
     getInitialState: function() {
         return {
-            showOptions: false,
-            inputOptionsList: []
+            showOptions: false
         }
     },
     updateOptions: function(list) {
-        console.log('Updated the options!');
-        this.setState({
-            inputOptionsList: list
-        });
+        this.props.inputOptionsList = list;
+        console.log(this.props.inputOptionsList);
     },
     handleChangeType: function(event) {
         if (event.target.value == 'dropdown') {
@@ -27,6 +24,7 @@ var AddInputGroup = React.createClass({
     },
     handleSubmit: function(event) {
         event.preventDefault();
+        this.updateOptions();
 
         var inputGroup = {
             id: uuid.v4(),
@@ -37,13 +35,15 @@ var AddInputGroup = React.createClass({
                 type: this.refs.inputType.getDOMNode().value.trim(),
                 disabled: false,
                 readonly: false,
-                options: this.state.inputOptionsList
+                options: this.props.inputOptionsList
             }
         }
 
         this.props.handleAddInputGroup(inputGroup);
     },
     render: function() {
+        this.props.inputOptionsList = [];
+
         return (
             <form onSubmit={this.handleSubmit}>
                 <Fieldset legend='Add Input Group'>
@@ -69,7 +69,7 @@ var AddInputGroup = React.createClass({
                         </div>
                     </div>
 
-                    {this.state.showOptions ? <InputOptions handleAddInputOptions={this.updateOptions} /> : null}
+                    {this.state.showOptions ? <InputOptions handleAddInputOptions={this.updateOptions} inputOptionsList={this.props.inputOptionsList} /> : null}
 
                     <button type='submit'>Add to form <i className='fa fa-arrow-circle-right'></i></button>
                 </Fieldset>

@@ -2,26 +2,31 @@ var Fieldset = require('./Fieldset');
 var React = require('react');
 
 var InputOption = React.createClass({
+    handleChange: function(event) {
+        this.props.option.title = this.refs.optionTitle.getDOMNode().value;
+        this.props.option.selected = this.refs.optionSelected.getDOMNode().checked;
+        this.props.option.disabled = this.refs.optionDisabled.getDOMNode().checked;
+    },
     render: function() {
-        var optionID = this.props.optionInfo;
+        var optionID = this.props.option.id;
 
         return (
             <Fieldset id='inputOption' legend={'Option ' + optionID}>
                 <div id='inputOption' className='row'>
                     <div className='column one-whole medium-one-half'>
-                        <label htmlFor={'inputOptionTitle' + optionID}> Option Title
-                            <input id={'inputOptionTitle' + optionID} name={'inputOptionTitle' + optionID} type='text' required ref={'inputOptionTitle' + optionID} />
+                        <label htmlFor={'optionTitle' + optionID}> Option Title
+                            <input onChange={this.handleChange} id={'optionTitle' + optionID} name={'optionTitle' + optionID} type='text' required ref='optionTitle' />
                         </label>
                     </div>
 
                     <div className='column one-whole medium-one-half'>
-                        <input id={'inputOptionSelected' + optionID} name='inputOptionSelected' type='radio' ref={'inputOptionSelected' + optionID} />
-                        <label htmlFor={'inputOptionSelected' + optionID}>Selected</label>
+                        <input onChange={this.handleChange} id={'optionSelected' + optionID} name='optionSelected' type='radio' ref='optionSelected' />
+                        <label htmlFor={'optionSelected' + optionID}>Selected</label>
                     </div>
 
                     <div className='column one-whole medium-one-half'>
-                        <input id={'inputOptionDisabled' + optionID} name='inputOptionDisabled' type='checkbox' ref={'inputOptionDisabled' + optionID} />
-                        <label htmlFor={'inputOptionDisabled' + optionID}>Disabled</label>
+                        <input onChange={this.handleChange} id={'optionDisabled' + optionID} name='optionDisabled' type='checkbox' ref='optionDisabled' />
+                        <label htmlFor={'optionDisabled' + optionID}>Disabled</label>
                     </div>
                 </div>
             </Fieldset>
@@ -31,8 +36,12 @@ var InputOption = React.createClass({
 
 var InputOptions = React.createClass({
     getInitialState: function() {
+        var initialOptionsList = this.props.inputOptionsList;
+        var option = {id: 1, selected: false, disabled: false};
+        initialOptionsList.push(option)
+
         return {
-            inputOptionsList: [<InputOption optionInfo={1} key={1} />]
+            inputOptionsList: initialOptionsList
         }
     },
     addOption: function() {
@@ -46,7 +55,8 @@ var InputOptions = React.createClass({
 
         if (n > 0) {
             for (var i = 1; i <= n; i++) {
-                optionsList.push(<InputOption optionInfo={optionsList.length + 1} key={optionsList.length + 1} />);
+                var option = {id: optionsList.length + 1, selected: false, disabled: false};
+                optionsList.push(option);
             }
         } else if (n < 0 && optionsList.length >= 2) {
             for (var i = 1; i <= Math.abs(n); i++) {
@@ -56,11 +66,19 @@ var InputOptions = React.createClass({
         this.setState({
             inputOptionsList: optionsList
         });
+        this.props.handleAddInputOptions(this.state.inputOptionsList);
+    },
+    handleInput: function(event) {
+        console.log(event);
     },
     render: function() {
+        var options = this.state.inputOptionsList;
+
         return (
             <div id='inputOptions'>
-                {this.state.inputOptionsList}
+                {options.map(function(option) {
+                    return <InputOption option={option} handleInput={this.handleInput} key={option.id} />
+                })}
 
                 <a onClick={this.removeOption} className='button tiny secondary right repeat-control'>
                     <i className='fa fa-minus-square'></i>

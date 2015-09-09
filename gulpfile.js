@@ -57,12 +57,11 @@ gulp.task('JS', function () {
         debug: true,
         transform: [reactify]
     });
-    var errorTitle = 'Browserify compile error';
 
     return b.bundle()
         .on('error', notify.onError({
-            title: errorTitle,
-            message: '@ <%= options.time %> on <%= options.date %>',
+            title: 'Error @ <%= options.time %> on <%= options.date %>',
+            message: '<%= error.message %>',
             templateOptions: {
                 time: getTimeStamp()[0],
                 date: getTimeStamp()[1]
@@ -70,13 +69,12 @@ gulp.task('JS', function () {
         }))
         .on('error', function(err) {
             gutil.log(
-                gutil.colors.red(errorTitle),
+                gutil.colors.red('Browserify compile error'),
                 err.message
             );
             gutil.beep();
             this.emit('end');
         })
-
         .pipe(source('app.js'))
         .pipe(buffer())
         .pipe(maps.init({loadMaps: true}))
@@ -142,7 +140,10 @@ gulp.task('moveHTML', function() {
 
 gulp.task('watchFiles', function() {
     gulp.watch(config.srcDir + '/scss/**/*.scss', ['compileSCSS']);
-    gulp.watch(config.srcDir + '/js/**/*.js*', ['JS']);
+    gulp.watch(config.srcDir + '/js/**/*.js*', ['JS'])
+        .on('change', function(event) {
+            console.log('JS changed! Running tasks...');
+        });
     gulp.watch(config.srcDir + '/*.html', ['moveHTML']);
 });
 
