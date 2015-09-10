@@ -66,10 +66,6 @@ var InputOptions = React.createClass({
         this.setState({
             inputOptionsList: optionsList
         });
-        this.props.handleAddInputOptions(this.state.inputOptionsList);
-    },
-    handleInput: function(event) {
-        console.log(event);
     },
     render: function() {
         var options = this.state.inputOptionsList;
@@ -77,7 +73,7 @@ var InputOptions = React.createClass({
         return (
             <div id='inputOptions'>
                 {options.map(function(option) {
-                    return <InputOption option={option} handleInput={this.handleInput} key={option.id} />
+                    return <InputOption option={option} key={option.id} />
                 })}
 
                 <a onClick={this.removeOption} className='button tiny secondary right repeat-control'>
