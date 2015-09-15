@@ -1,4 +1,4 @@
-# Draggable Form Builder
+# Web Form Builder
 
 Clone the repository and move into the project directory
 
